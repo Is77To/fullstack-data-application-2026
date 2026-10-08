@@ -1,0 +1,17 @@
+Point de contrôle	
+Les codes de statut correspondent à la spec (201, 404, 409)	: OK	( Suite aux tests faits directement manuellement ) 
+response_model présent sur les 4 routes		OK     ( à voir sur le code de reservation.py )
+
+La validation date_fin > date_debut est bien dans le schéma Pydantic	OK    (  Dans ReservationCreate, la validation est faite avec un @model_validator(mode="after") : si date_fin <= date_debut, Pydantic lève une ValueError, convertie par FastAPI en réponse 422. )
+	
+Le router n'accède pas au stockage de items	OK  ( Non, il accède à son propre stockage " FAKE_DB " )
+	
+Pas d'async def sans await		OK ( tous les def dans le code sont écrits de manière normale ( synchrone ) )
+Aucune dépendance ajoutée dans requirements.txt (ou justifiée)	OK ( étant donné que fast api installe lui-même pydantic, il n'est pas nécessaire de l'ajouter au fichier requirements )
+
+Les routes littérales sont déclarées avant les routes paramétrées	OK 	( Exemple : @router.get("", response_model=list[ReservationRead]) et @router.get("/{reservation_id}", response_model=ReservationRead) )
+
+
+Le code renvoie une réponse cohérente pour POST /reservations/999/annuler         OK ( {
+  "detail": "Réservation 999 introuvable"
+}
